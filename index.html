@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>YashiX: All frontier AI models working together in one desktop workspace</title>
   <meta name="description" content="Free multi-agent desktop studio for macOS, Windows and Linux. Claude Code, Codex, Grok, Gemini and local models work concurrently in one room on your plans and check each other.">
-  <meta name="theme-color" content="#080807">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +34,7 @@
           <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
         </svg>
       </a>
-      <a class="btn small" href="#install">Download</a>
+      <a class="btn small primary" href="#install">Download</a>
     </div>
   </header>
 
@@ -51,7 +51,7 @@
           Free, 100% local on your machine, with shared memory, persistent prompt caching, side-by-side benchmark arena, and 540+ built-in engineering skills.
         </p>
 
-        <!-- The Hacker Command Box (Matching mylunchbox.dev exactly) -->
+        <!-- Command Box -->
         <div class="install">
           <div class="cmdbox">
             <div class="os" id="osDropdown">
@@ -87,40 +87,25 @@
       </div>
     </section>
 
-    <!-- Section 01: The Room -->
+    <!-- Section 01: The Room (Showcasing User's Real App Screenshot) -->
     <section class="sec room" id="room">
       <div class="wrap">
         <header class="head">
           <p class="idx"><b>01</b>The room</p>
           <h2>You ask once and the agents pass the work between them.</h2>
-          <p class="body lead">A room is one shared conversation for one task, with your agents in it. The lead model plans, delegates to specialists, and verifies proof.</p>
+          <p class="body lead">A room is one shared conversation for one task, with your agents in it. Claude leads the plan, hands sub-tasks to Codex and Gemini, and checks proof.</p>
         </header>
 
-        <div class="terminal-card">
-          <div class="term-bar">
-            <span class="term-dots"><i></i><i></i><i></i></span>
-            <span class="term-title">room-auth-refactor (4 agents active)</span>
-            <span class="term-right">Auto mode • 90% cache hit</span>
+        <!-- Prominent App Window Preview -->
+        <figure class="app-figure">
+          <div class="app-frame">
+            <img src="assets/app-preview.jpg" alt="YashiX multi-agent workspace running Claude Sonnet, Gemini Flash, Codex and Grok" class="app-screenshot" width="1200" height="750">
           </div>
-          <pre class="term-body"><code><span class="c-user">&gt; You:</span> Implement Redis token bucket rate limiting on the OAuth route and verify with concurrent load tests.
-
-<span class="c-lead">@claude (Lead Architect):</span>
-Plan:
-1. Review existing authentication middleware and Redis adapter.
-2. Delegate leaky-bucket implementation to <span class="c-hl">@codex</span>.
-3. Hand off concurrent stress tests to <span class="c-hl">@gemini</span>.
-
-<span class="c-note">[Handoff &rarr; @codex: Build rate_limiter.ts with atomic Redis scripts]</span>
-<span class="c-agent">@codex:</span> Implemented token bucket using Redis EVAL with TTL auto-expiry.
-Edits: <span class="c-file">src/auth/limiter.ts</span>, <span class="c-file">src/auth/redis.ts</span>
-
-<span class="c-note">[Handoff &rarr; @gemini: Run Playwright and concurrent curl burst tests]</span>
-<span class="c-agent">@gemini:</span> Executing burst test (5,000 reqs/sec)...
-<span class="c-green">&#10004; 5000/5000 requests processed</span>
-<span class="c-green">&#10004; 0 unhandled rejections</span>
-<span class="c-green">&#10004; Max latency: 1.12ms</span>
-<span class="c-lead">@claude:</span> Proof verified. Changes are clean, all 18 tests passing.</code></pre>
-        </div>
+          <figcaption class="app-caption">
+            <span>YashiX v0.1.9 &mdash; Live room execution: Claude Sonnet 4.6 (Lead), Gemini 3.8 Flash, Codex GPT-6, Grok 3</span>
+            <span class="caption-tag">90% Cache Hit</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -254,21 +239,21 @@ export async function* parsePacket(stream: Readable) {
                 <td>Claude Sonnet 4.6</td>
                 <td>450</td>
                 <td>8,200</td>
-                <td class="c-green">$0.024 saved</td>
+                <td class="c-white">$0.024 saved</td>
               </tr>
               <tr>
                 <td>Turn 3</td>
                 <td>Codex GPT-6</td>
                 <td>620</td>
                 <td>9,100</td>
-                <td class="c-green">$0.028 saved</td>
+                <td class="c-white">$0.028 saved</td>
               </tr>
               <tr>
                 <td>Turn 4</td>
                 <td>Gemini 3.8 Flash</td>
                 <td>310</td>
                 <td>10,400</td>
-                <td class="c-green">$0.032 saved</td>
+                <td class="c-white">$0.032 saved</td>
               </tr>
             </tbody>
           </table>
@@ -319,7 +304,7 @@ export async function* parsePacket(stream: Readable) {
         <header class="head">
           <p class="idx"><b>06</b>Get YashiX</p>
           <h2>Download for your operating system.</h2>
-          <p class="body lead">Free and open source. No account required, no telemetry.</p>
+          <p class="body lead">Free and open source. No account required, zero telemetry.</p>
         </header>
 
         <div class="dl-grid">
