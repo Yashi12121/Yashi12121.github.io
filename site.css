@@ -983,6 +983,10 @@ h2.idx { font-weight: 400; }
   color: var(--dim);
 }
 .community-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font: 500 13px/1 var(--sans);
   height: 40px;
   padding: 0 18px;
@@ -991,6 +995,8 @@ h2.idx { font-weight: 400; }
   color: var(--ink);
   border: 1px solid var(--line2);
   white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
   transition: all .15s ease;
 }
 .community-btn:hover {
