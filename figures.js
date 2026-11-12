@@ -269,33 +269,55 @@ export function mountFigures({ reduced }) {
   requestAnimationFrame(frame)
 }
 
-// The furoshiki mark, sampled from its SVG into glyphs. Each quarter around the knot is drawn in a
-// different agent's alphabet, so the box is literally made of the four of them.
+// The YashiX Y logo mark, rendered into ASCII glyphs (0, /, 1, X, @) with a breathing wave.
+// The left wing uses binary (Codex), the right wing uses code slashes (Grok), the stem uses
+// tokens (Gemini), and the junction weaves them together (Claude).
 export async function mountMark(el, { reduced }) {
   if (!el) return
-  const img = new Image()
-  img.src = 'assets/mark.svg'
-  await img.decode().catch(() => {})
   const cols = 64
   const rows = 34
   const c = document.createElement('canvas')
   c.width = cols
   c.height = rows
   const ctx = c.getContext('2d', { willReadFrequently: true })
-  ctx.drawImage(img, 0, 0, cols, rows)
+
+  // Render the iconic YashiX geometric 'Y' logo onto the canvas
+  ctx.fillStyle = '#ffffff'
+  ctx.beginPath()
+  ctx.moveTo(6, 3)
+  ctx.lineTo(19.7, 3)
+  ctx.lineTo(32, 12.4)
+  ctx.lineTo(44.3, 3)
+  ctx.lineTo(58, 3)
+  ctx.lineTo(37.9, 17.6)
+  ctx.lineTo(37.9, 31)
+  ctx.lineTo(26.1, 31)
+  ctx.lineTo(26.1, 17.6)
+  ctx.closePath()
+  ctx.fill()
+
   const data = ctx.getImageData(0, 0, cols, rows).data
-  const order = [ALPHA.claude, ALPHA.codex, ALPHA.grok, ALPHA.gemini]
-  const cx = cols / 2
-  const cy = rows * 0.52
+  const ALPHA_LEFT = '.-0101'
+  const ALPHA_RIGHT = '.:-01///\\\\|X#'
+  const ALPHA_CENTER = '.-=+*#%@'
+  const ALPHA_STEM = '.-01oO0@'
 
   function draw(t) {
     let out = ''
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const a = data[(y * cols + x) * 4 + 3] / 255
-        if (a < 0.2) { out += ' '; continue }
-        const q = (Math.floor(((Math.atan2(y - cy, (x - cx) * 0.5) + Math.PI) / (Math.PI / 2)) + 0.5) % 4 + 4) % 4
-        const alpha = order[q]
+        if (a < 0.25) { out += ' '; continue }
+
+        let alpha
+        if (y < 12) {
+          alpha = x < 32 ? ALPHA_LEFT : ALPHA_RIGHT
+        } else if (y < 17) {
+          alpha = ALPHA_CENTER
+        } else {
+          alpha = ALPHA_STEM
+        }
+
         const wave = 0.5 + 0.5 * Math.sin(t * 1.4 + x * 0.21 - y * 0.33)
         const v = Math.min(0.999, a * (0.55 + 0.45 * wave) + hash(x, y, Math.floor(t * 2)) * 0.12)
         const ch = esc(alpha[Math.floor(v * alpha.length)])

@@ -121,3 +121,28 @@ loadAssets()
 mountFigures({ reduced })
 mountMark(document.querySelector('[data-mark]'), { reduced })
 mountArena(document.querySelector('[data-arena]'), { reduced })
+
+// Interactive Room Chapters
+const chapterList = document.querySelector('[data-chapters]')
+const roomCaption = document.getElementById('roomCaption')
+if (chapterList && roomCaption) {
+  roomCaption.style.transition = 'opacity 0.15s ease'
+  chapterList.addEventListener('click', e => {
+    const btn = e.target.closest('.chapter-btn')
+    if (!btn) return
+    chapterList.querySelectorAll('.chapter-btn').forEach(b => b.removeAttribute('aria-current'))
+    btn.setAttribute('aria-current', 'true')
+    if (btn.dataset.caption) {
+      roomCaption.style.opacity = '0.3'
+      setTimeout(() => {
+        roomCaption.textContent = btn.dataset.caption
+        roomCaption.style.opacity = '1'
+      }, 120)
+    }
+    hands?.touch()
+  })
+}
+
+// Smooth background ripple on hero interaction
+document.querySelector('.hero')?.addEventListener('pointerdown', () => hands?.touch())
+

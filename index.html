@@ -75,13 +75,23 @@
           <p class="body lead">A room is one shared conversation for one task, with your agents in it. Claude leads the plan, hands sub-tasks to Codex and Gemini, and checks proof.</p>
         </header>
 
-        <figure class="screen">
-          <img src="assets/app-preview.png" alt="YashiX Desktop - What are we working on?" width="1280" height="800" style="display: block; width: 100%; height: auto; border: 1px solid var(--line2); border-radius: 6px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);">
-          <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font: 400 12px/1 var(--mono); color: var(--faint);">
-            <span>YashiX v0.1.9 &mdash; Direct capture: Autonomous multi-agent workspace</span>
-            <span style="color: #10b981;">90% Cache Hit</span>
-          </figcaption>
-        </figure>
+        <div class="room-body">
+          <ol class="chapters" data-chapters>
+            <li><button type="button" class="chapter-btn" aria-current="true" data-caption="Direct capture: Autonomous multi-agent workspace"><span class="tc">00:00</span><span>You ask for a swarm plan: configure rate limiting, delegate implementation, and verify concurrently.</span></button></li>
+            <li><button type="button" class="chapter-btn" data-caption="Claude Sonnet 4.6 (Lead Architect): Decomposes system into modular subtasks"><span class="tc">00:09</span><span>Claude makes the architectural roadmap and provisions state.</span></button></li>
+            <li><button type="button" class="chapter-btn" data-caption="Grok 3 (Adversarial Critic): Audits race conditions and failure boundaries"><span class="tc">00:19</span><span>Grok checks edge cases and stress-tests concurrency.</span></button></li>
+            <li><button type="button" class="chapter-btn" data-caption="Codex GPT-6 (Implementation IC): Ships high-performance Redis leaky-bucket middleware"><span class="tc">00:23</span><span>Claude briefs Codex, and Codex builds the implementation.</span></button></li>
+            <li><button type="button" class="chapter-btn" data-caption="Gemini 3.8 Flash (QA): Executes 5,000 concurrent mock bursts"><span class="tc">00:34</span><span>Gemini runs the verification and benchmark suite.</span></button></li>
+            <li><button type="button" class="chapter-btn" data-caption="Real Proof Check: All 18 edge assertions passed with exit code 0"><span class="tc">00:41</span><span>All 18 tests pass with exit code 0; real proof verified.</span></button></li>
+          </ol>
+          <figure class="screen">
+            <img src="assets/app-preview.png" alt="YashiX Desktop - What are we working on?" width="1280" height="800" style="display: block; width: 100%; height: auto; border: 1px solid var(--line2); border-radius: 6px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);">
+            <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font: 400 12px/1 var(--mono); color: var(--faint);">
+              <span id="roomCaption">Direct capture: Autonomous multi-agent workspace</span>
+              <span style="color: #10b981;">90% Cache Hit</span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
