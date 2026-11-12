@@ -1,5 +1,5 @@
 import './nav.js'
-import { mountHands } from './hands.js'
+import { mountHands } from './hands.js?v=2.1'
 import { mountFigures, mountMark, mountArena } from './figures.js'
 import { mountAppMockup } from './app-mockup.js'
 
