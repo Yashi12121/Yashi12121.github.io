@@ -269,20 +269,34 @@ export function mountFigures({ reduced }) {
   requestAnimationFrame(frame)
 }
 
-// The furoshiki mark, sampled from its SVG into glyphs. Each quarter around the knot is drawn in a
-// different agent's alphabet, so the box is literally made of the four of them.
+// The YashiX 'Y' mark, sampled into live hacker glyphs. Each quarter around the logo is drawn in a
+// different agent's alphabet (0, 1, /, \, X, @), so the logo is literally formed by the four agents.
 export async function mountMark(el, { reduced }) {
   if (!el) return
-  const img = new Image()
-  img.src = 'assets/mark.svg'
-  await img.decode().catch(() => {})
   const cols = 64
   const rows = 34
   const c = document.createElement('canvas')
   c.width = cols
   c.height = rows
   const ctx = c.getContext('2d', { willReadFrequently: true })
-  ctx.drawImage(img, 0, 0, cols, rows)
+
+  // Direct vector render of the YashiX 'Y' mark
+  const sx = cols / 100
+  const sy = rows / 100
+  ctx.fillStyle = '#ffffff'
+  ctx.beginPath()
+  ctx.moveTo(6 * sx, 6 * sy)
+  ctx.lineTo(36 * sx, 6 * sy)
+  ctx.lineTo(50 * sx, 38 * sy)
+  ctx.lineTo(64 * sx, 6 * sy)
+  ctx.lineTo(94 * sx, 6 * sy)
+  ctx.lineTo(64 * sx, 50 * sy)
+  ctx.lineTo(64 * sx, 94 * sy)
+  ctx.lineTo(36 * sx, 94 * sy)
+  ctx.lineTo(36 * sx, 50 * sy)
+  ctx.closePath()
+  ctx.fill()
+
   const data = ctx.getImageData(0, 0, cols, rows).data
   const order = [ALPHA.claude, ALPHA.codex, ALPHA.grok, ALPHA.gemini]
   const cx = cols / 2

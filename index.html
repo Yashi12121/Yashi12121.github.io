@@ -3,432 +3,344 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>YashiX Swarm Rebuild: The complete multi-agent workspace</title>
-  <meta name="description" content="Free desktop AI workspace for macOS, Windows and Linux. Claude Code, Codex, Grok, Gemini, and local models work concurrently in one autonomous swarm on your plans and check each other.">
-  <meta name="theme-color" content="#080807">
+  <title>YashiX: Swarm Rebuild &mdash; The Autonomous Multi-Agent Workspace</title>
+  <meta name="description" content="Free developer studio for macOS, Windows and Linux. Claude Code, Codex, Grok, Gemini, and local models collaborate in one unified room on your machine.">
+  <meta name="theme-color" content="#09090b">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="site.css">
-  <script type="importmap">
-  { "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-  } }
-  </script>
 </head>
 <body>
 
   <!-- Navigation -->
-  <header class="nav">
-    <a class="brand" href="/" aria-label="YashiX home">
-      <img src="assets/icon.png" alt="YashiX logo" width="22" height="22">
-      <span>YashiX</span>
-    </a>
-    <nav class="links" aria-label="Main">
-      <a href="#room">The Room</a>
-      <a href="#how">How It Works</a>
-      <a href="#agents">Agents</a>
-      <a href="#pool">Pool</a>
-      <a href="#savings">Savings</a>
-      <a href="#side">Side by Side</a>
-      <a href="#install">Downloads</a>
-    </nav>
-    <div class="end">
-      <a class="gh" href="https://github.com/Yashi12121/YashiX" aria-label="YashiX on GitHub">
-        <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
-          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
+  <header class="nav-bar">
+    <div class="container nav-wrap">
+      <a class="nav-brand" href="/" aria-label="YashiX Home">
+        <span class="brand-icon">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M5 5L13.5 16.5V27H18.5V16.5L27 5H21.2L16 12.4L10.8 5H5Z" fill="#FFFFFF"/>
+          </svg>
+        </span>
+        <span>YashiX</span>
+        <span class="nav-status-pill">
+          <span class="pulse-dot"></span>
+          <span>v0.1.9 Swarm</span>
+        </span>
       </a>
-      <a class="btn small" href="#install">Download</a>
+
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#showcase">Studio</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#models">Models</a>
+        <a href="#community">Community</a>
+        <a href="#download">Downloads</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn-github" href="https://github.com/Yashi12121/YashiX" target="_blank" rel="noopener" aria-label="GitHub Repository">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span>Star</span>
+        </a>
+        <a class="btn-primary" href="#download">Download</a>
+      </div>
     </div>
   </header>
 
-  <main>
-    <!-- Hero Section with Three.js ASCII canvas -->
-    <section class="hero">
-      <canvas class="hands" aria-hidden="true"></canvas>
+  <!-- Hero Section -->
+  <section class="hero-sec">
+    <!-- Interactive Multi-Agent Constellation Canvas -->
+    <canvas id="swarmCanvas" class="swarm-canvas"></canvas>
 
-      <div class="copy">
-        <a class="tag" href="https://github.com/Yashi12121/YashiX/releases/tag/v0.1.9">
-          <span>0.1.9</span> YashiX Swarm Rebuild
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span>v0.1.9</span> YashiX Swarm Rebuild
+      </div>
+
+      <h1 class="hero-title">
+        Swarm Rebuild.<br>
+        <span class="gradient-text">The Autonomous Multi-Agent Workspace.</span>
+      </h1>
+
+      <p class="hero-lede">
+        Run Claude Code, Codex, Grok, Gemini, and local open-weights together on your machine.
+        Single-prompt orchestration, automatic task delegation, and verified shell proof.
+      </p>
+
+      <!-- Install Terminal Card -->
+      <div class="install-card">
+        <div class="os-tabs">
+          <button type="button" class="os-tab active" data-tab="win">Windows (PowerShell)</button>
+          <button type="button" class="os-tab" data-tab="mac">macOS (Terminal)</button>
+          <button type="button" class="os-tab" data-tab="linux">Linux (Shell)</button>
+        </div>
+
+        <div class="cmd-bar">
+          <div class="cmd-text">
+            <span class="cmd-sigil">$</span>
+            <code id="cmdDisplay">irm https://raw.githubusercontent.com/Yashi12121/YashiX/main/install.ps1 | iex</code>
+          </div>
+          <button type="button" class="btn-copy" id="btnCopyCmd">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/>
+              <path d="M3.5 10.5h-1a1 1 0 01-1-1v-7a1 1 0 011-1h7a1 1 0 011 1v1"/>
+            </svg>
+            <span id="copyLabel">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-dl-cta">
+        <span>Prefer direct installer?</span>
+        <a class="hero-dl-link" href="https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe">
+          Download YashiX-Setup-0.1.9.exe (Windows x64)
         </a>
-        <h1>Swarm Rebuild.<br>The complete multi-agent workspace.</h1>
-        <p class="lede">
-          Claude Code, Codex, Grok, Gemini, and local models work concurrently in one autonomous swarm on your own plans and check each other.
-          Free, 100% local on your machine, with shared memory, persistent prompt caching, and verified proof checks.
-        </p>
+      </div>
+    </div>
+  </section>
 
-        <div class="install" data-install></div>
+  <!-- Section 01: Real Desktop App Showcase -->
+  <section class="sec-showcase" id="showcase">
+    <div class="container">
+      <div class="sec-header">
+        <p class="sec-label">Native Studio Environment</p>
+        <h2 class="sec-title">What are we working on?</h2>
+        <p class="sec-desc">A unified workspace where all frontier models, connected tools, and local skills execute concurrently in one shared room.</p>
       </div>
 
-      <p class="sr-only" aria-live="polite" data-live></p>
-    </section>
+      <!-- Tab Switcher for Real Screenshots -->
+      <div class="showcase-switcher">
+        <button type="button" class="switch-tab active" id="tabWorkspace">Workspace (New Room)</button>
+        <button type="button" class="switch-tab" id="tabPool">Pool &amp; Allowance Dashboard</button>
+      </div>
 
-    <!-- Section 01: The Room (Interactive Developer Tool & Real Screenshot) -->
-    <section class="sec room" id="room" aria-labelledby="room-title">
-      <div class="wrap">
-        <header class="head">
-          <p class="idx"><b>01</b>The room</p>
-          <h2 id="room-title">You ask once and the agents pass the work between them.</h2>
-          <p class="body lead">A room is one shared conversation for one task, with your agents in it. Claude leads the plan, hands sub-tasks to Codex and Gemini, and checks proof.</p>
-        </header>
-
-        <!-- View Switcher -->
-        <div class="view-controls">
-          <button type="button" class="view-btn active" id="btnInteractiveView">Interactive Swarm UI</button>
-          <button type="button" class="view-btn" id="btnScreenshotView">Real App Screenshot</button>
-        </div>
-
-        <!-- 1. Interactive Desktop Tool Window -->
-        <div class="desktop-sim" id="interactiveSim">
-          <!-- Title bar -->
-          <div class="sim-titlebar">
-            <div class="traffic-lights">
-              <span class="light-red"></span>
-              <span class="light-yellow"></span>
-              <span class="light-green"></span>
-            </div>
-            <div class="sim-title">
-              <span>backend-core</span>
-              <span class="sep">|</span>
-              <span class="topic">Refactor Auth Service &amp; Side-by-Side Verification</span>
-            </div>
-            <div class="sim-status-tags">
-              <span class="tag-active-agents">4 Agents Active</span>
-              <span class="tag-cache-hit">90% Cache Hit</span>
-            </div>
+      <!-- Native App Window Frame -->
+      <div class="app-window-frame">
+        <div class="app-window-bar">
+          <div class="window-title">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M5 5L13.5 16.5V27H18.5V16.5L27 5H21.2L16 12.4L10.8 5H5Z" fill="#FFFFFF"/>
+            </svg>
+            <span id="windowTitleText">YashiX Desktop &mdash; What are we working on?</span>
           </div>
-
-          <!-- Simulator Body -->
-          <div class="sim-body">
-            <!-- Left Sidebar -->
-            <aside class="sim-sidebar">
-              <!-- Room Crew Section -->
-              <div>
-                <div class="sidebar-section-title">Room Crew</div>
-                <div class="sim-crew-list">
-                  <div class="crew-item lead">
-                    <div class="crew-header">
-                      <span class="crew-dot dot-amber"></span>
-                      <span>Claude Sonnet 4.6</span>
-                    </div>
-                    <span class="crew-role">Lead Architect</span>
-                  </div>
-                  <div class="crew-item">
-                    <div class="crew-header">
-                      <span class="crew-dot dot-blue"></span>
-                      <span>Gemini 3.8 Flash</span>
-                    </div>
-                    <span class="crew-role">Fast Context &amp; QA</span>
-                  </div>
-                  <div class="crew-item">
-                    <div class="crew-header">
-                      <span class="crew-dot dot-green"></span>
-                      <span>Codex GPT-6</span>
-                    </div>
-                    <span class="crew-role">Implementation IC</span>
-                  </div>
-                  <div class="crew-item">
-                    <div class="crew-header">
-                      <span class="crew-dot dot-pink"></span>
-                      <span>Grok 3</span>
-                    </div>
-                    <span class="crew-role">Adversarial Critic</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thinking Effort -->
-              <div>
-                <div class="sidebar-section-title">Thinking Effort</div>
-                <div class="effort-group">
-                  <button type="button" class="effort-pill">Low</button>
-                  <button type="button" class="effort-pill active">Normal</button>
-                  <button type="button" class="effort-pill">High</button>
-                </div>
-                <div class="effort-sub">Dynamic model budget</div>
-              </div>
-
-              <!-- Token Ledger -->
-              <div>
-                <div class="sidebar-section-title">Token Ledger</div>
-                <div class="sim-ledger">
-                  <div class="ledger-row">
-                    <span>Cached Read:</span>
-                    <span>48.2k (90%)</span>
-                  </div>
-                  <div class="ledger-row">
-                    <span>Fresh Tokens:</span>
-                    <span>5.1k</span>
-                  </div>
-                  <div class="ledger-row highlight">
-                    <span>Net Savings:</span>
-                    <span>$0.23 / turn</span>
-                  </div>
-                </div>
-              </div>
-            </aside>
-
-            <!-- Main Chat Workspace -->
-            <div class="sim-main">
-              <div class="sim-messages">
-                <!-- User Prompt -->
-                <div class="sim-msg">
-                  <div class="msg-avatar av-you">You</div>
-                  <div class="msg-content">
-                    Implement high-throughput token bucket rate limiting on the OAuth API, and benchmark it with concurrent unit tests.
-                  </div>
-                </div>
-
-                <!-- Claude Lead Response -->
-                <div class="sim-msg">
-                  <div class="msg-avatar av-claude">CL</div>
-                  <div class="msg-content">
-                    <div class="msg-header">Claude Sonnet 4.6 <span class="role">• Lead Architect</span></div>
-                    <p>I have analyzed the current middleware pipeline. Here is the implementation roadmap:</p>
-                    <ul class="sim-plan-list">
-                      <li class="plan-done">✔ 1. Extract existing Redis client configuration and fallback memory store</li>
-                      <li class="plan-done">✔ 2. Delegate leaky-bucket implementation to @codex</li>
-                      <li class="plan-active">▸ 3. Delegate concurrency load test suite to @gemini</li>
-                    </ul>
-                    <div class="sim-handoff">→ Handed off component tests to Gemini 3.8 Flash</div>
-                  </div>
-                </div>
-
-                <!-- Gemini Flash Verification -->
-                <div class="sim-msg">
-                  <div class="msg-avatar av-gemini">GM</div>
-                  <div class="msg-content">
-                    <div class="msg-header gm">Gemini 3.8 Flash <span class="role">• Verification</span></div>
-                    <p>Tests generated and executed against 5,000 concurrent mock bursts: <b>0 dropped requests</b>, mean latency <b>0.82ms</b>. All 18 edge assertions passed.</p>
-                    <div class="test-summary">
-                      <div>✔ rate_limiter_burst_recovery (0.82ms) pass</div>
-                      <div>✔ redis_partition_failover_memory (1.14ms) pass</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bottom Composer -->
-              <div class="sim-composer">
-                <div class="composer-input-row">
-                  <input type="text" class="composer-input" value="Message the room. @ to address one agent, ! to run a command." readonly>
-                  <button type="button" class="btn-send" title="Send" aria-label="Send">↑</button>
-                </div>
-                <div class="composer-tools-row">
-                  <div class="composer-left-tools">
-                    <span class="tag-active-agents">4 Agents</span>
-                    <span class="tag-mode">Auto Mode</span>
-                  </div>
-                  <div>Ctrl + Enter to send</div>
-                </div>
-              </div>
-            </div>
+          <div class="window-controls">
+            <span>&minus;</span>
+            <span>&square;</span>
+            <span>&times;</span>
           </div>
         </div>
 
-        <!-- 2. Real App Screenshot Container (Hidden by default, toggleable) -->
-        <div id="screenshotSim" style="display: none;">
-          <figure class="app-screen">
-            <img src="assets/app-preview.jpg" alt="YashiX real running app interface" class="app-screen-img" width="1200" height="750">
-            <figcaption style="display: flex; justify-content: space-between; padding-top: 12px; font: 400 12px/1 var(--mono); color: var(--faint);">
-              <span>YashiX v0.1.9 &mdash; Unedited execution: Claude Sonnet 4.6 (Lead), Gemini 3.8 Flash, Codex GPT-6, Grok 3</span>
-              <span style="color: #10b981;">90% Cache Hit</span>
-            </figcaption>
-          </figure>
-        </div>
+        <img src="assets/app-preview.jpg" id="appScreenshotImg" alt="YashiX desktop workspace interface" class="window-screen" width="1280" height="820">
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 02: How it works (Monochrome Data Sheet Plates) -->
-    <section class="sec paper" id="how" aria-labelledby="how-title">
-      <div class="wrap">
-        <header class="head">
-          <p class="idx"><b>02</b>How it works</p>
-          <h2 id="how-title">Four rules let several agents share a task without losing the thread.</h2>
-        </header>
-        <div class="plates">
-          <article class="plate">
-            <p class="plate-no">2.1<span>Crew</span></p>
-            <pre class="fig" data-fig="crew" aria-hidden="true"></pre>
-            <h3>The first agent leads</h3>
-            <p>The first agent in your crew answers you. Midway through a task it brings in a crewmate for the part that crewmate does better.</p>
-          </article>
-          <article class="plate">
-            <p class="plate-no">2.2<span>Briefings</span></p>
-            <pre class="fig" data-fig="brief" aria-hidden="true"></pre>
-            <h3>Crewmates start briefed</h3>
-            <p>A crewmate gets the goal, what the room has learned, the files that changed and its own task. Only the lead reads the whole log.</p>
-          </article>
-          <article class="plate">
-            <p class="plate-no">2.3<span>Limits</span></p>
-            <pre class="fig" data-fig="limit" aria-hidden="true"></pre>
-            <h3>Work moves on at the limit</h3>
-            <p>When an agent runs out of usage, the next one takes the same task with a briefing. YashiX shows the reset time and brings the first one back after it.</p>
-          </article>
-          <article class="plate">
-            <p class="plate-no">2.4<span>Proof</span></p>
-            <pre class="fig" data-fig="proof" aria-hidden="true"></pre>
-            <h3>Claims need a passing command</h3>
-            <p>An agent can only say the tests pass when a test command passed after its last edit. Without one, the claim waits for you.</p>
-          </article>
-        </div>
+  <!-- Section 02: Bento Grid Architecture -->
+  <section class="sec-bento" id="architecture">
+    <div class="container">
+      <div class="sec-header">
+        <p class="sec-label">Swarm Architecture</p>
+        <h2 class="sec-title">Four rules for coordinated intelligence without losing the thread.</h2>
+        <p class="sec-desc">Frontier models operate with complementary strengths: planning, coding, verification, and adversarial criticism.</p>
       </div>
-    </section>
 
-    <!-- Section 03: Agents -->
-    <section class="sec" id="agents" aria-labelledby="agents-title">
-      <div class="wrap">
-        <header class="head">
-          <p class="idx"><b>03</b>Agents</p>
-          <h2 id="agents-title">The agents you already pay for, each on its own login.</h2>
-        </header>
-        <div class="table" role="table" aria-label="Agents YashiX runs">
-          <div class="row th" role="row"><span role="columnheader">Agent</span><span role="columnheader">Runs as</span><span role="columnheader">Signs in with</span><span role="columnheader">Drawn in</span></div>
-          <div class="row" role="row"><span role="cell">Claude Code</span><span role="cell">Its own CLI</span><span role="cell">Your Claude plan</span><span role="cell"><pre class="swatch" data-glyphs=".:-=+*#%@" aria-label="Claude glyphs"></pre></span></div>
-          <div class="row" role="row"><span role="cell">Codex</span><span role="cell">Its own CLI</span><span role="cell">Your ChatGPT plan</span><span role="cell"><pre class="swatch" data-glyphs=".-01" aria-label="Codex glyphs"></pre></span></div>
-          <div class="row" role="row"><span role="cell">Grok Build</span><span role="cell">Its own CLI</span><span role="cell">Your xAI account</span><span role="cell"><pre class="swatch" data-glyphs=".:/\|X#" aria-label="Grok glyphs"></pre></span></div>
-          <div class="row" role="row"><span role="cell">Gemini CLI</span><span role="cell">Its own CLI</span><span role="cell">Your Google account</span><span role="cell"><pre class="swatch" data-glyphs=".,oO0@" aria-label="Gemini glyphs"></pre></span></div>
-        </div>
-        <div class="more">
-          <div>
-            <h3>Command Line Agents</h3>
-            <p>Claude Code, Codex, Grok, Gemini, OpenCode, Aider, Goose, and Cursor agent.</p>
+      <div class="bento-grid">
+        <div class="bento-card amber span-2">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
           </div>
-          <div>
-            <h3>Local Offline Models</h3>
-            <p>Ollama, LM Studio and llama.cpp on your own GPU with zero network calls and full privacy.</p>
+          <h3>Autonomous Task Delegation</h3>
+          <p>The lead agent breaks down the problem, creates the roadmap, and automatically hands off sub-tasks to specialized crewmates: implementation to Codex, QA benchmarks to Gemini, and edge-case criticism to Grok.</p>
+        </div>
+
+        <div class="bento-card emerald">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
           </div>
-          <div>
-            <h3>Frontier API Keys</h3>
-            <p>Anthropic, OpenAI, Google, xAI, OpenRouter, DeepSeek, Fireworks, Groq, and Together AI.</p>
+          <h3>Seamless Limit Failover</h3>
+          <p>When Claude or GPT hits an hourly usage limit, YashiX automatically resumes with Gemini or local open-weights with the exact same memory and context.</p>
+        </div>
+
+        <div class="bento-card cyan">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
           </div>
+          <h3>Prompt Cache Engine</h3>
+          <p>Rooms preserve a stable prefix across turns. Anthropic, OpenAI, and Gemini read cached tokens at a tenth of the price, saving up to 90% on API costs.</p>
+        </div>
+
+        <div class="bento-card blue">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Real Shell Proof Verification</h3>
+          <p>An agent's claim that tests passed is never trusted on text alone. YashiX executes actual local shell subprocesses and checks exit codes before proceeding.</p>
+        </div>
+
+        <div class="bento-card emerald">
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+            </svg>
+          </div>
+          <h3>100% Local &amp; Private</h3>
+          <p>All chats, memory logs, and API keys remain on your machine. Zero cloud telemetry. Full offline execution via Ollama and LM Studio.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 04: Pool -->
-    <section class="sec" id="pool" aria-labelledby="pool-title">
-      <div class="wrap split">
-        <header class="head stack">
-          <p class="idx"><b>04</b>Pool</p>
-          <h2 id="pool-title">Your plans work as one pool.</h2>
-          <p class="body">YashiX reads each plan's real limits through that tool's own login. You see what is left in every 5 hour window and every week, when each one resets, and which agent did best at each kind of work.</p>
-        </header>
-        <figure class="meter" aria-label="Example of the Pool page">
-          <div class="meter-top"><span>Pool</span><span>Live limits</span></div>
-          <div class="meter-rows" data-meter></div>
-        </figure>
+  <!-- Section 03: Provider Matrix -->
+  <section class="sec-matrix" id="models">
+    <div class="container">
+      <div class="sec-header">
+        <p class="sec-label">Model Connectivity</p>
+        <h2 class="sec-title">Works with your existing accounts and local hardware.</h2>
+        <p class="sec-desc">Sign in with your plans or provide standard API keys. YashiX connects directly without intermediary servers.</p>
       </div>
-    </section>
 
-    <!-- Section 05: Savings -->
-    <section class="sec" id="savings" aria-labelledby="savings-title">
-      <div class="wrap split">
-        <figure class="panel cache">
-          <div class="panel-top"><span>Savings</span><span>Example room</span></div>
-          <pre class="cache-fig" data-fig-wide="cache" aria-hidden="true"></pre>
-          <div class="legend"><span><i class="k-paid"></i>Full price</span><span><i class="k-cached"></i>Cached (90% off)</span></div>
-        </figure>
-        <header class="head stack right">
-          <p class="idx"><b>05</b>Savings</p>
-          <h2 id="savings-title">Spend up to 90% less on tokens.</h2>
-          <p class="body">YashiX sets up every room for persistent prompt caching, so tokens the provider has already seen cost about a tenth of the price. On a plan that means more room before your limit. On an API key it means a smaller bill.</p>
-          <p class="body">The Token Ledger shows real dollar savings per turn and per room.</p>
-        </header>
-      </div>
-    </section>
-
-    <!-- Section 06: Side by side Arena -->
-    <section class="sec" id="side" aria-labelledby="side-title">
-      <div class="wrap">
-        <header class="head">
-          <p class="idx"><b>06</b>Side by side</p>
-          <h2 id="side-title">Ask the whole crew at once and keep the best answer.</h2>
-          <p class="body lead">One message goes to every agent in the room, and the answers arrive in columns. The one you keep feeds that agent's rating, so Pool shows which agent wins at which kind of work.</p>
-        </header>
-        <figure class="panel arena" data-arena>
-          <div class="panel-top"><span>Side by side</span><span data-arena-status>4 still working</span></div>
-          <p class="arena-ask"><span>You</span><span data-arena-ask></span></p>
-          <div class="arena-cols" data-arena-cols></div>
-          <div class="arena-foot"><span>Kept this week</span><span class="arena-tally" data-arena-tally></span></div>
-        </figure>
-
-        <!-- Open Source & Community Driven Banner (Attachment 4) -->
-        <div class="community-banner">
-          <div class="community-content">
-            <h3 class="community-title">Open Source &amp; Community Driven</h3>
-            <p class="community-desc">Read the source code, inspect security boundaries, or contribute agent integrations on GitHub.</p>
+      <div class="provider-grid">
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">Anthropic</span>
+            <span class="provider-badge">Connected</span>
           </div>
-          <a class="community-btn" href="https://github.com/Yashi12121/YashiX" target="_blank" rel="noopener">Star on GitHub</a>
+          <p class="provider-models">Claude Code CLI, Claude 3.7 Sonnet, Claude Opus, Haiku</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">OpenAI</span>
+            <span class="provider-badge">Connected</span>
+          </div>
+          <p class="provider-models">Codex, GPT-4o, GPT-4.5, o1, o3-mini via ChatGPT or API</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">Google AI</span>
+            <span class="provider-badge">Connected</span>
+          </div>
+          <p class="provider-models">Gemini 2.5 Pro, 2.0 Flash (1M context), Gemini CLI</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">xAI</span>
+            <span class="provider-badge">Connected</span>
+          </div>
+          <p class="provider-models">Grok 2, Grok 3 with live web and X search retrieval</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">DeepSeek</span>
+            <span class="provider-badge">Connected</span>
+          </div>
+          <p class="provider-models">DeepSeek R1, DeepSeek V3 via API or OpenRouter</p>
+        </div>
+
+        <div class="provider-card">
+          <div class="provider-header">
+            <span class="provider-name">Local GPU</span>
+            <span class="provider-badge">Offline</span>
+          </div>
+          <p class="provider-models">Ollama, LM Studio, llama.cpp with zero network calls</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 07: Install & Downloads -->
-    <section class="sec end-cta" id="install" aria-labelledby="install-title">
-      <div class="wrap end-grid">
-        <pre class="mark-ascii" data-mark aria-hidden="true"></pre>
-        <div class="end-main">
-          <p class="idx"><b>07</b>Install</p>
-          <h2 id="install-title">Install YashiX and launch your first swarm.</h2>
-          <div class="install" data-install></div>
-          <ul class="files">
-            <li><a data-asset="Setup-.*\.exe$" href="https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe"><span>Windows 10, 11 (x64)</span><span>.exe installer</span></a></li>
-            <li><a data-asset="mac-arm64\.dmg$" href="https://github.com/Yashi12121/YashiX/releases"><span>macOS, Apple Silicon (M1-M4)</span><span>.dmg</span></a></li>
-            <li><a data-asset="mac-x64\.dmg$" href="https://github.com/Yashi12121/YashiX/releases"><span>macOS, Intel</span><span>.dmg</span></a></li>
-            <li><a data-asset="amd64\.deb$" href="https://github.com/Yashi12121/YashiX/releases"><span>Linux, Debian and Ubuntu</span><span>.deb</span></a></li>
-            <li><a data-asset="x86_64\.AppImage$" href="https://github.com/Yashi12121/YashiX/releases"><span>Linux, any distribution</span><span>.AppImage</span></a></li>
-          </ul>
+  <!-- Section 04: Open Source & Community Banner -->
+  <section class="sec-community" id="community">
+    <div class="container">
+      <div class="community-box">
+        <div class="community-info">
+          <h3>Open Source &amp; Community Driven</h3>
+          <p>Read the source code, inspect security boundaries, or contribute agent integrations on GitHub.</p>
+        </div>
+        <a class="btn-star" href="https://github.com/Yashi12121/YashiX" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+            <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
+          </svg>
+          <span>Star on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 05: Installation & Downloads -->
+  <section class="sec-download" id="download">
+    <div class="container">
+      <div class="sec-header">
+        <p class="sec-label">Download &amp; Install</p>
+        <h2 class="sec-title">Get YashiX for your operating system.</h2>
+        <p class="sec-desc">Free and open source under MIT. No account required, zero telemetry.</p>
+      </div>
+
+      <div class="dl-grid">
+        <div class="dl-card highlight">
+          <span class="dl-card-tag">Windows</span>
+          <h3>Windows 10, 11</h3>
+          <p>Installer package (x64) with automatic agent CLI configuration.</p>
+          <code class="dl-code">irm .../install.ps1 | iex</code>
+          <a href="https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe" class="btn-dl primary">
+            Download .exe Installer (v0.1.9)
+          </a>
+        </div>
+
+        <div class="dl-card">
+          <span class="dl-card-tag">macOS</span>
+          <h3>macOS</h3>
+          <p>Universal build for Apple Silicon (M1-M4) and Intel architectures.</p>
+          <code class="dl-code">curl -fsSL .../install.sh | bash</code>
+          <a href="https://github.com/Yashi12121/YashiX/releases" class="btn-dl">
+            Download .dmg Release
+          </a>
+        </div>
+
+        <div class="dl-card">
+          <span class="dl-card-tag">Linux</span>
+          <h3>Linux</h3>
+          <p>Standalone AppImage and Debian package for all distributions.</p>
+          <code class="dl-code">curl -fsSL .../install.sh | bash</code>
+          <a href="https://github.com/Yashi12121/YashiX/releases" class="btn-dl">
+            Download AppImage / DEB
+          </a>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer class="foot">
-    <div class="wrap foot-row">
-      <span class="brand">
-        <img src="assets/icon.png" alt="YashiX logo" width="20" height="20">
-        <span>YashiX</span>
-      </span>
-      <nav class="foot-links" aria-label="Footer">
-        <a href="https://github.com/Yashi12121/YashiX">GitHub</a>
-        <a href="https://github.com/Yashi12121/YashiX/releases">Releases (v0.1.9)</a>
-        <a href="#room">The Room</a>
-        <a href="#how">How It Works</a>
-        <a href="#side">Side by Side</a>
-      </nav>
-      <p class="fine">&copy; 2026 YashiX. Released under MIT. All keys and memory stay on your machine.</p>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-left">
+        <span>&copy; 2026 YashiX. Released under the MIT License.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#showcase">Studio</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#models">Models</a>
+        <a href="https://github.com/Yashi12121/YashiX" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/Yashi12121/YashiX/releases">Releases</a>
+      </div>
     </div>
   </footer>
-
-  <!-- Install template for top & bottom rows -->
-  <template id="install-tpl">
-    <div class="cmdbox">
-      <label class="os">
-        <select data-os aria-label="Your system">
-          <option value="win">Windows</option>
-          <option value="mac">macOS</option>
-          <option value="linux">Linux</option>
-        </select>
-        <svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      </label>
-      <button class="cmd" type="button" title="Click to copy install command">
-        <span class="sigil" aria-hidden="true">$</span>
-        <code></code>
-        <span class="copy-cell" aria-hidden="true">
-          <svg class="i-copy" viewBox="0 0 16 16" width="16" height="16"><rect x="5" y="5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 2H2v9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          <svg class="i-done" viewBox="0 0 16 16" width="16" height="16"><path d="M2.5 8.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" stroke-width="1.75"/></svg>
-        </span>
-      </button>
-    </div>
-    <a class="btn ghost gh-btn" href="https://github.com/Yashi12121/YashiX" target="_blank" rel="noopener">
-      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      <span>GitHub</span>
-    </a>
-  </template>
 
   <script type="module" src="main.js"></script>
 </body>
