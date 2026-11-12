@@ -3,28 +3,28 @@ import { mountHands } from './hands.js'
 import { mountFigures, mountMark, mountArena } from './figures.js'
 import { mountAppMockup } from './app-mockup.js'
 
-const RAW = 'https://raw.githubusercontent.com/Yashi12121/YashiX/main'
-const RELEASES = 'https://api.github.com/repos/Yashi12121/YashiX/releases/latest'
+const RAW = 'https://yashi12121.github.io'
+const RELEASES = 'https://api.github.com/repos/Yashi12121/Yashi12121.github.io/releases/latest'
 
 const OS = {
   win: {
     name: 'Windows',
-    full: `irm ${RAW}/install.ps1 | iex`,
-    short: 'irm …/install.ps1 | iex',
+    full: 'irm https://yashi12121.github.io/install.ps1 | iex',
+    short: 'irm yashi12121.github.io/install.ps1 | iex',
     note: 'Paste into PowerShell. Downloads and installs YashiX v0.1.9.',
     hint: 'Paste this in PowerShell. It installs YashiX and opens your first swarm room.',
   },
   mac: {
     name: 'macOS',
-    full: `curl -fsSL ${RAW}/install.sh | bash`,
-    short: 'curl -fsSL …/install.sh | bash',
+    full: 'curl -fsSL https://yashi12121.github.io/install.sh | bash',
+    short: 'curl -fsSL yashi12121.github.io/install.sh | bash',
     note: 'Installs for Apple Silicon (M1-M4) & Intel.',
     hint: 'Paste this in Terminal on your Mac. It opens the YashiX releases and downloads the .dmg.',
   },
   linux: {
     name: 'Linux',
-    full: `curl -fsSL ${RAW}/install.sh | bash`,
-    short: 'curl -fsSL …/install.sh | bash',
+    full: 'curl -fsSL https://yashi12121.github.io/install.sh | bash',
+    short: 'curl -fsSL yashi12121.github.io/install.sh | bash',
     note: 'Installs the deb package or AppImage on any Linux distribution.',
     hint: 'Paste this in a terminal. It opens the YashiX Linux releases.',
   },
