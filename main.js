@@ -1,129 +1,153 @@
-/**
- * YashiX Terminal Landing Site Logic
- * Hacker minimal, instant response, zero framework bloat
- */
+import './nav.js'
+import { mountHands } from './hands.js'
+import { mountFigures, mountMark, mountArena } from './figures.js'
 
-let GITHUB_REPO_URL = 'https://github.com/Yashi12121/YashiX'
+const RAW = 'https://raw.githubusercontent.com/Yashi12121/YashiX/main'
+const RELEASES = 'https://api.github.com/repos/Yashi12121/YashiX/releases/latest'
 
-const OS_CONFIG = {
-  windows: {
-    label: 'Windows',
-    command: 'irm https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe -OutFile YashiX-Setup.exe; .\\YashiX-Setup.exe',
-    hint: 'Run this in PowerShell. It downloads YashiX and starts the installer automatically.',
-    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe',
+const OS = {
+  win: {
+    name: 'Windows',
+    full: `irm ${RAW}/install.ps1 | iex`,
+    short: 'irm …/install.ps1 | iex',
+    note: 'Paste into PowerShell. Downloads and installs YashiX v0.1.9.',
+    hint: 'Paste this in PowerShell. It installs YashiX and opens your first swarm room.',
   },
-  macos: {
-    label: 'macOS',
-    command: 'curl -fsSL https://github.com/Yashi12121/YashiX/raw/main/install.sh | bash',
-    hint: 'Run this in Terminal. Compatible with Apple Silicon (M1-M4) & Intel chips.',
-    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases',
+  mac: {
+    name: 'macOS',
+    full: `curl -fsSL ${RAW}/install.sh | bash`,
+    short: 'curl -fsSL …/install.sh | bash',
+    note: 'Installs for Apple Silicon (M1-M4) & Intel.',
+    hint: 'Paste this in Terminal on your Mac. It opens the YashiX releases and downloads the .dmg.',
   },
   linux: {
-    label: 'Linux',
-    command: 'curl -fsSL https://github.com/Yashi12121/YashiX/raw/main/install.sh | bash',
-    hint: 'Run this in your shell. Installs the AppImage and registers the desktop icon.',
-    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases',
+    name: 'Linux',
+    full: `curl -fsSL ${RAW}/install.sh | bash`,
+    short: 'curl -fsSL …/install.sh | bash',
+    note: 'Installs the deb package or AppImage on any Linux distribution.',
+    hint: 'Paste this in a terminal. It opens the YashiX Linux releases.',
   },
 }
 
-function detectOS() {
-  const ua = window.navigator.userAgent.toLowerCase()
-  if (ua.includes('win')) return 'windows'
-  if (ua.includes('mac')) return 'macos'
-  if (ua.includes('linux')) return 'linux'
-  return 'windows'
+function detect() {
+  const p = (navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase()
+  if (p.includes('win')) return 'win'
+  if (p.includes('linux') && !/android/i.test(navigator.userAgent)) return 'linux'
+  return 'mac'
 }
 
-let activeOS = 'windows'
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+const phone = matchMedia('(max-width: 820px) and (pointer: coarse)').matches
 
-document.addEventListener('DOMContentLoaded', () => {
-  activeOS = detectOS()
-  switchOS(activeOS)
-  initDropdown()
-  initCopy()
-  initGithub(GITHUB_REPO_URL)
+// Mount Three.js interactive ASCII hands background
+const hands = mountHands(document.querySelector('.hands'), { reduced })
+const live = document.querySelector('[data-live]')
+const template = document.querySelector('#install-tpl')
+
+// Both install rows share one choice of system
+const rows = [...document.querySelectorAll('[data-install]')].map(slot => {
+  slot.append(template.content.cloneNode(true))
+  const hint = Object.assign(document.createElement('p'), { className: 'install-hint' })
+  slot.querySelector('.cmdbox').after(hint)
+  return {
+    hint,
+    cmd: slot.querySelector('.cmd'),
+    code: slot.querySelector('code'),
+    select: slot.querySelector('[data-os]'),
+  }
 })
 
-function switchOS(key) {
-  const cfg = OS_CONFIG[key] || OS_CONFIG.windows
-  activeOS = key
+let os = detect()
 
-  const label = document.getElementById('selectedOsLabel')
-  const code = document.getElementById('cmdCode')
-  const hint = document.getElementById('installHint')
+function show(next) {
+  os = next
+  const o = OS[os]
+  for (const r of rows) {
+    r.code.textContent = o.short
+    r.cmd.title = `${o.full}\n\n${o.note}`
+    r.cmd.setAttribute('aria-label', `Copy the install command for ${o.name}. ${o.note}`)
+    r.hint.textContent = phone ? 'YashiX is a desktop app. Open this page on your computer to install it.' : o.hint
+    r.select.value = os
+  }
+}
 
-  if (label) label.textContent = cfg.label
-  if (code) code.textContent = cfg.command
-  if (hint) hint.textContent = cfg.hint
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    const area = Object.assign(document.createElement('textarea'), { value: text })
+    document.body.append(area)
+    area.select()
+    document.execCommand('copy')
+    area.remove()
+  }
+}
 
-  document.querySelectorAll('.os-option').forEach((opt) => {
-    opt.classList.toggle('active', opt.getAttribute('data-os') === key)
+for (const r of rows) {
+  let timer
+  r.select.addEventListener('change', () => show(r.select.value))
+  r.cmd.addEventListener('click', async () => {
+    await copy(OS[os].full)
+    r.cmd.classList.remove('shine')
+    void r.cmd.offsetWidth
+    r.cmd.classList.add('copied', 'shine')
+    if (live) live.textContent = 'Install command copied'
+    hands?.touch()
+    clearTimeout(timer)
+    timer = setTimeout(() => r.cmd.classList.remove('copied'), 1800)
   })
 }
 
-function initDropdown() {
-  const dropdown = document.getElementById('osDropdown')
-  const trigger = document.getElementById('osTrigger')
-  if (!dropdown || !trigger) return
+show(os)
 
-  trigger.addEventListener('click', (e) => {
-    e.stopPropagation()
-    dropdown.classList.toggle('open')
-  })
-
-  document.querySelectorAll('.os-option').forEach((opt) => {
-    opt.addEventListener('click', (e) => {
-      e.stopPropagation()
-      const os = opt.getAttribute('data-os')
-      if (os) switchOS(os)
-      dropdown.classList.remove('open')
+// Fetch latest assets from releases API if available
+async function loadAssets() {
+  try {
+    const res = await fetch(RELEASES, { headers: { Accept: 'application/vnd.github+json' } })
+    if (!res.ok) return
+    const assets = (await res.json()).assets ?? []
+    const find = re => assets.find(a => re.test(a.name))?.browser_download_url
+    document.querySelectorAll('[data-asset]').forEach(a => {
+      const url = find(new RegExp(a.dataset.asset))
+      if (url) a.href = url
     })
+  } catch {
+    // Keep fallback URLs
+  }
+}
+loadAssets()
+
+// Mount Figures and Benchmark Arena
+mountFigures({ reduced })
+mountMark(document.querySelector('[data-mark]'), { reduced })
+mountArena(document.querySelector('[data-arena]'), { reduced })
+
+// View Switcher between Interactive UI and Real Screenshot
+const btnInteractive = document.getElementById('btnInteractiveView')
+const btnScreenshot = document.getElementById('btnScreenshotView')
+const interactiveSim = document.getElementById('interactiveSim')
+const screenshotSim = document.getElementById('screenshotSim')
+
+if (btnInteractive && btnScreenshot && interactiveSim && screenshotSim) {
+  btnInteractive.addEventListener('click', () => {
+    btnInteractive.classList.add('active')
+    btnScreenshot.classList.remove('active')
+    interactiveSim.style.display = 'block'
+    screenshotSim.style.display = 'none'
   })
 
-  document.addEventListener('click', () => {
-    dropdown.classList.remove('open')
+  btnScreenshot.addEventListener('click', () => {
+    btnScreenshot.classList.add('active')
+    btnInteractive.classList.remove('active')
+    screenshotSim.style.display = 'block'
+    interactiveSim.style.display = 'none'
   })
 }
 
-function initCopy() {
-  const btn = document.getElementById('cmdBtn')
-  const code = document.getElementById('cmdCode')
-  if (!btn || !code) return
-
-  btn.addEventListener('click', async () => {
-    const text = code.textContent.trim()
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text)
-      } else {
-        const ta = document.createElement('textarea')
-        ta.value = text
-        document.body.appendChild(ta)
-        ta.select()
-        document.execCommand('copy')
-        document.body.removeChild(ta)
-      }
-
-      btn.classList.add('copied', 'shine')
-      setTimeout(() => {
-        btn.classList.remove('copied')
-      }, 2000)
-      setTimeout(() => {
-        btn.classList.remove('shine')
-      }, 900)
-    } catch (e) {
-      console.error('Copy failed:', e)
-    }
+// Thinking Effort Selector in Interactive Simulator
+document.querySelectorAll('.effort-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.effort-pill').forEach(p => p.classList.remove('active'))
+    pill.classList.add('active')
   })
-}
-
-function initGithub(url) {
-  GITHUB_REPO_URL = url
-  const ids = ['navGithubLink', 'footerGithubLink']
-  ids.forEach((id) => {
-    const el = document.getElementById(id)
-    if (el) el.href = url
-  })
-}
-
-window.setGithubUrl = initGithub
+})
