@@ -1,88 +1,123 @@
-import { mountSwarmCanvas } from './swarm-canvas.js'
+import './nav.js'
+import { mountHands } from './hands.js'
+import { mountFigures, mountMark, mountArena } from './figures.js'
 
-// 1. Initialize Interactive Swarm Canvas in Hero
-const canvas = document.getElementById('swarmCanvas')
-if (canvas) {
-  mountSwarmCanvas(canvas)
+const RAW = 'https://raw.githubusercontent.com/Yashi12121/YashiX/main'
+const RELEASES = 'https://api.github.com/repos/Yashi12121/YashiX/releases/latest'
+
+const OS = {
+  win: {
+    name: 'Windows',
+    full: `irm ${RAW}/install.ps1 | iex`,
+    short: 'irm …/install.ps1 | iex',
+    note: 'Paste into PowerShell. Downloads and installs YashiX v0.1.9.',
+    hint: 'Paste this in PowerShell. It installs YashiX and opens your first swarm room.',
+  },
+  mac: {
+    name: 'macOS',
+    full: `curl -fsSL ${RAW}/install.sh | bash`,
+    short: 'curl -fsSL …/install.sh | bash',
+    note: 'Installs for Apple Silicon (M1-M4) & Intel.',
+    hint: 'Paste this in Terminal on your Mac. It opens the YashiX releases and downloads the .dmg.',
+  },
+  linux: {
+    name: 'Linux',
+    full: `curl -fsSL ${RAW}/install.sh | bash`,
+    short: 'curl -fsSL …/install.sh | bash',
+    note: 'Installs the deb package or AppImage on any Linux distribution.',
+    hint: 'Paste this in a terminal. It opens the YashiX Linux releases.',
+  },
 }
 
-// 2. Install Bar OS Tab Switching & Clipboard Copy
-const CMDS = {
-  win: 'irm https://raw.githubusercontent.com/Yashi12121/YashiX/main/install.ps1 | iex',
-  mac: 'curl -fsSL https://raw.githubusercontent.com/Yashi12121/YashiX/main/install.sh | bash',
-  linux: 'curl -fsSL https://raw.githubusercontent.com/Yashi12121/YashiX/main/install.sh | bash',
+function detect() {
+  const p = (navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase()
+  if (p.includes('win')) return 'win'
+  if (p.includes('linux') && !/android/i.test(navigator.userAgent)) return 'linux'
+  return 'mac'
 }
 
-let activeOS = 'win'
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+const phone = matchMedia('(max-width: 820px) and (pointer: coarse)').matches
 
-// Detect visitor OS
-const ua = (navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase()
-if (ua.includes('mac')) activeOS = 'mac'
-else if (ua.includes('linux')) activeOS = 'linux'
-else activeOS = 'win'
+// Mount Three.js interactive ASCII hands background
+const hands = mountHands(document.querySelector('.hands'), { reduced })
+const live = document.querySelector('[data-live]')
+const template = document.querySelector('#install-tpl')
 
-const cmdDisplay = document.getElementById('cmdDisplay')
-const btnCopyCmd = document.getElementById('btnCopyCmd')
-const copyLabel = document.getElementById('copyLabel')
-const osTabs = document.querySelectorAll('.os-tab')
-
-function switchTab(os) {
-  activeOS = os
-  if (cmdDisplay) cmdDisplay.textContent = CMDS[os]
-  osTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === os))
-}
-
-osTabs.forEach(tab => {
-  tab.addEventListener('click', () => switchTab(tab.dataset.tab))
+// Both install rows share one choice of system
+const rows = [...document.querySelectorAll('[data-install]')].map(slot => {
+  slot.append(template.content.cloneNode(true))
+  const hint = Object.assign(document.createElement('p'), { className: 'install-hint' })
+  slot.querySelector('.cmdbox').after(hint)
+  return {
+    hint,
+    cmd: slot.querySelector('.cmd'),
+    code: slot.querySelector('code'),
+    select: slot.querySelector('[data-os]'),
+  }
 })
-switchTab(activeOS)
 
-if (btnCopyCmd) {
+let os = detect()
+
+function show(next) {
+  os = next
+  const o = OS[os]
+  for (const r of rows) {
+    r.code.textContent = o.short
+    r.cmd.title = `${o.full}\n\n${o.note}`
+    r.cmd.setAttribute('aria-label', `Copy the install command for ${o.name}. ${o.note}`)
+    r.hint.textContent = phone ? 'YashiX is a desktop app. Open this page on your computer to install it.' : o.hint
+    r.select.value = os
+  }
+}
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    const area = Object.assign(document.createElement('textarea'), { value: text })
+    document.body.append(area)
+    area.select()
+    document.execCommand('copy')
+    area.remove()
+  }
+}
+
+for (const r of rows) {
   let timer
-  btnCopyCmd.addEventListener('click', async () => {
-    const text = CMDS[activeOS]
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text)
-      } else {
-        const ta = document.createElement('textarea')
-        ta.value = text
-        document.body.appendChild(ta)
-        ta.select()
-        document.execCommand('copy')
-        ta.remove()
-      }
-      btnCopyCmd.classList.add('copied')
-      if (copyLabel) copyLabel.textContent = 'Copied!'
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        btnCopyCmd.classList.remove('copied')
-        if (copyLabel) copyLabel.textContent = 'Copy'
-      }, 2000)
-    } catch {
-      // Fallback
-    }
+  r.select.addEventListener('change', () => show(r.select.value))
+  r.cmd.addEventListener('click', async () => {
+    await copy(OS[os].full)
+    r.cmd.classList.remove('shine')
+    void r.cmd.offsetWidth
+    r.cmd.classList.add('copied', 'shine')
+    if (live) live.textContent = 'Install command copied'
+    hands?.touch()
+    clearTimeout(timer)
+    timer = setTimeout(() => r.cmd.classList.remove('copied'), 1800)
   })
 }
 
-// 3. Real App Screenshot Tab Switcher
-const tabWorkspace = document.getElementById('tabWorkspace')
-const tabPool = document.getElementById('tabPool')
-const appScreenshotImg = document.getElementById('appScreenshotImg')
-const windowTitleText = document.getElementById('windowTitleText')
+show(os)
 
-if (tabWorkspace && tabPool && appScreenshotImg && windowTitleText) {
-  tabWorkspace.addEventListener('click', () => {
-    tabWorkspace.classList.add('active')
-    tabPool.classList.remove('active')
-    appScreenshotImg.src = 'assets/app-preview.jpg'
-    windowTitleText.innerHTML = 'YashiX Desktop &mdash; What are we working on?'
-  })
-
-  tabPool.addEventListener('click', () => {
-    tabPool.classList.add('active')
-    tabWorkspace.classList.remove('active')
-    appScreenshotImg.src = 'assets/screen-pool.jpg'
-    windowTitleText.innerHTML = 'YashiX Desktop &mdash; Pool &amp; Allowance Dashboard'
-  })
+// Fetch latest assets from releases API if available
+async function loadAssets() {
+  try {
+    const res = await fetch(RELEASES, { headers: { Accept: 'application/vnd.github+json' } })
+    if (!res.ok) return
+    const assets = (await res.json()).assets ?? []
+    const find = re => assets.find(a => re.test(a.name))?.browser_download_url
+    document.querySelectorAll('[data-asset]').forEach(a => {
+      const url = find(new RegExp(a.dataset.asset))
+      if (url) a.href = url
+    })
+  } catch {
+    // Keep fallback URLs
+  }
 }
+loadAssets()
+
+// Mount Figures and Benchmark Arena
+mountFigures({ reduced })
+mountMark(document.querySelector('[data-mark]'), { reduced })
+mountArena(document.querySelector('[data-arena]'), { reduced })
