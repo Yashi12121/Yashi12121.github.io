@@ -1,41 +1,32 @@
 /**
- * YashiX Website Interactive Logic
- * Clean, lightweight, zero dependencies
+ * YashiX Terminal Landing Site Logic
+ * Hacker minimal, instant response, zero framework bloat
  */
 
-// GitHub repository URL placeholder - user will provide their repo link
 let GITHUB_REPO_URL = 'https://github.com/yashix/yashix'
 
-// OS configuration dictionary
 const OS_CONFIG = {
   windows: {
     label: 'Windows',
-    tag: 'PowerShell',
     command: 'irm https://yashix.dev/install.ps1 | iex',
-    note: 'Run this in PowerShell. It installs YashiX and configures all agent CLIs automatically.',
-    downloadText: 'Or download .exe installer',
-    downloadUrl: '#download',
+    hint: 'Run this in PowerShell. It installs YashiX and configures all agent CLIs automatically.',
+    downloadUrl: '#install',
   },
   macos: {
     label: 'macOS',
-    tag: 'Apple Silicon & Intel',
     command: 'curl -fsSL https://yashix.dev/install.sh | bash',
-    note: 'Run this in Terminal. Installs YashiX for macOS (Universal binary for M1-M4 & Intel).',
-    downloadText: 'Or download .dmg file',
-    downloadUrl: '#download',
+    hint: 'Run this in Terminal. Compatible with Apple Silicon (M1-M4) & Intel chips.',
+    downloadUrl: '#install',
   },
   linux: {
     label: 'Linux',
-    tag: 'AppImage / Bash',
     command: 'curl -fsSL https://yashix.dev/install.sh | bash',
-    note: 'Run this in bash. Installs YashiX AppImage and registers the desktop icon.',
-    downloadText: 'Or download AppImage',
-    downloadUrl: '#download',
+    hint: 'Run this in your shell. Installs the AppImage and registers the desktop icon.',
+    downloadUrl: '#install',
   },
 }
 
-// Auto-detect client operating system
-function detectClientOS() {
+function detectOS() {
   const ua = window.navigator.userAgent.toLowerCase()
   if (ua.includes('win')) return 'windows'
   if (ua.includes('mac')) return 'macos'
@@ -43,165 +34,96 @@ function detectClientOS() {
   return 'windows'
 }
 
-let currentOS = 'windows'
+let activeOS = 'windows'
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Update GitHub links
-  updateGithubLinks(GITHUB_REPO_URL)
-
-  // Initialize OS detection
-  currentOS = detectClientOS()
-  applyOS(currentOS)
-
-  // Setup OS dropdown
-  setupOsDropdown()
-
-  // Setup copy button
-  setupCopyButton()
-
-  // Setup mobile navigation
-  setupMobileNav()
+  activeOS = detectOS()
+  switchOS(activeOS)
+  initDropdown()
+  initCopy()
+  initGithub(GITHUB_REPO_URL)
 })
 
-function applyOS(osKey) {
-  const cfg = OS_CONFIG[osKey] || OS_CONFIG.windows
-  currentOS = osKey
+function switchOS(key) {
+  const cfg = OS_CONFIG[key] || OS_CONFIG.windows
+  activeOS = key
 
-  // Update label
-  const labelEl = document.getElementById('selectedOsLabel')
-  if (labelEl) labelEl.textContent = cfg.label
+  const label = document.getElementById('selectedOsLabel')
+  const code = document.getElementById('cmdCode')
+  const hint = document.getElementById('installHint')
 
-  // Update command
-  const cmdEl = document.getElementById('installCommand')
-  if (cmdEl) cmdEl.textContent = cfg.command
+  if (label) label.textContent = cfg.label
+  if (code) code.textContent = cfg.command
+  if (hint) hint.textContent = cfg.hint
 
-  // Update footnote
-  const noteEl = document.getElementById('osNoteText')
-  if (noteEl) noteEl.textContent = cfg.note
-
-  // Update direct download link text
-  const directLink = document.getElementById('directDownloadLink')
-  if (directLink) {
-    directLink.textContent = cfg.downloadText
-    directLink.href = cfg.downloadUrl
-  }
-
-  // Update active item in dropdown menu
-  document.querySelectorAll('.os-item').forEach((item) => {
-    const isTarget = item.getAttribute('data-os') === osKey
-    item.classList.toggle('active', isTarget)
-    item.setAttribute('aria-selected', isTarget ? 'true' : 'false')
+  document.querySelectorAll('.os-option').forEach((opt) => {
+    opt.classList.toggle('active', opt.getAttribute('data-os') === key)
   })
 }
 
-function setupOsDropdown() {
+function initDropdown() {
   const dropdown = document.getElementById('osDropdown')
   const trigger = document.getElementById('osTrigger')
-  const menu = document.getElementById('osMenu')
+  if (!dropdown || !trigger) return
 
-  if (!dropdown || !trigger || !menu) return
-
-  // Toggle dropdown
   trigger.addEventListener('click', (e) => {
     e.stopPropagation()
-    const isOpen = dropdown.classList.toggle('open')
-    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+    dropdown.classList.toggle('open')
   })
 
-  // Select item
-  document.querySelectorAll('.os-item').forEach((item) => {
-    item.addEventListener('click', (e) => {
+  document.querySelectorAll('.os-option').forEach((opt) => {
+    opt.addEventListener('click', (e) => {
       e.stopPropagation()
-      const os = item.getAttribute('data-os')
-      if (os && OS_CONFIG[os]) {
-        applyOS(os)
-      }
+      const os = opt.getAttribute('data-os')
+      if (os) switchOS(os)
       dropdown.classList.remove('open')
-      trigger.setAttribute('aria-expanded', 'false')
     })
   })
 
-  // Close on outside click
-  document.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove('open')
-      trigger.setAttribute('aria-expanded', 'false')
-    }
-  })
-
-  // Escape key closes dropdown
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && dropdown.classList.contains('open')) {
-      dropdown.classList.remove('open')
-      trigger.setAttribute('aria-expanded', 'false')
-      trigger.focus()
-    }
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open')
   })
 }
 
-function setupCopyButton() {
-  const copyBtn = document.getElementById('copyBtn')
-  const cmdEl = document.getElementById('installCommand')
-  const tooltip = document.getElementById('copiedTooltip')
+function initCopy() {
+  const btn = document.getElementById('cmdBtn')
+  const code = document.getElementById('cmdCode')
+  if (!btn || !code) return
 
-  if (!copyBtn || !cmdEl || !tooltip) return
-
-  copyBtn.addEventListener('click', async () => {
-    const textToCopy = cmdEl.textContent.trim()
+  btn.addEventListener('click', async () => {
+    const text = code.textContent.trim()
     try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(textToCopy)
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text)
       } else {
-        // Fallback for older environments
-        const textArea = document.createElement('textarea')
-        textArea.value = textToCopy
-        document.body.appendChild(textArea)
-        textArea.select()
+        const ta = document.createElement('textarea')
+        ta.value = text
+        document.body.appendChild(ta)
+        ta.select()
         document.execCommand('copy')
-        document.body.removeChild(textArea)
+        document.body.removeChild(ta)
       }
 
-      // Show toast
-      tooltip.classList.add('show')
+      btn.classList.add('copied', 'shine')
       setTimeout(() => {
-        tooltip.classList.remove('show')
+        btn.classList.remove('copied')
       }, 2000)
-    } catch (err) {
-      console.error('Failed to copy command:', err)
+      setTimeout(() => {
+        btn.classList.remove('shine')
+      }, 900)
+    } catch (e) {
+      console.error('Copy failed:', e)
     }
   })
 }
 
-function setupMobileNav() {
-  const toggle = document.getElementById('mobileToggle')
-  const navLinks = document.getElementById('navLinks')
-
-  if (!toggle || !navLinks) return
-
-  toggle.addEventListener('click', () => {
-    const isVisible = navLinks.style.display === 'flex'
-    navLinks.style.display = isVisible ? 'none' : 'flex'
-    if (!isVisible) {
-      navLinks.style.position = 'absolute'
-      navLinks.style.top = '64px'
-      navLinks.style.left = '0'
-      navLinks.style.width = '100%'
-      navLinks.style.background = 'rgba(14, 13, 11, 0.98)'
-      navLinks.style.flexDirection = 'column'
-      navLinks.style.padding = '20px'
-      navLinks.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)'
-    }
-  })
-}
-
-function updateGithubLinks(url) {
+function initGithub(url) {
   GITHUB_REPO_URL = url
-  const ids = ['navGithubLink', 'bannerGithubBtn', 'footerGithubLink']
+  const ids = ['navGithubLink', 'footerGithubLink']
   ids.forEach((id) => {
     const el = document.getElementById(id)
     if (el) el.href = url
   })
 }
 
-// Global hook so user can update the GitHub URL easily at runtime or via console
-window.setGithubUrl = updateGithubLinks
+window.setGithubUrl = initGithub
