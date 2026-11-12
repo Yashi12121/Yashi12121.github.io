@@ -8,21 +8,21 @@ let GITHUB_REPO_URL = 'https://github.com/Yashi12121/YashiX'
 const OS_CONFIG = {
   windows: {
     label: 'Windows',
-    command: 'irm https://yashix.dev/install.ps1 | iex',
-    hint: 'Run this in PowerShell. It installs YashiX and configures all agent CLIs automatically.',
-    downloadUrl: '#install',
+    command: 'irm https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe -OutFile YashiX-Setup.exe; .\\YashiX-Setup.exe',
+    hint: 'Run this in PowerShell. It downloads YashiX and starts the installer automatically.',
+    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases/download/v0.1.9/YashiX-Setup-0.1.9.exe',
   },
   macos: {
     label: 'macOS',
-    command: 'curl -fsSL https://yashix.dev/install.sh | bash',
+    command: 'curl -fsSL https://github.com/Yashi12121/YashiX/raw/main/install.sh | bash',
     hint: 'Run this in Terminal. Compatible with Apple Silicon (M1-M4) & Intel chips.',
-    downloadUrl: '#install',
+    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases',
   },
   linux: {
     label: 'Linux',
-    command: 'curl -fsSL https://yashix.dev/install.sh | bash',
+    command: 'curl -fsSL https://github.com/Yashi12121/YashiX/raw/main/install.sh | bash',
     hint: 'Run this in your shell. Installs the AppImage and registers the desktop icon.',
-    downloadUrl: '#install',
+    downloadUrl: 'https://github.com/Yashi12121/YashiX/releases',
   },
 }
 
