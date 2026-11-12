@@ -3,7 +3,7 @@
  * Hacker minimal, instant response, zero framework bloat
  */
 
-let GITHUB_REPO_URL = 'https://github.com/yashix/yashix'
+let GITHUB_REPO_URL = 'https://github.com/Yashi12121/YashiX'
 
 const OS_CONFIG = {
   windows: {
