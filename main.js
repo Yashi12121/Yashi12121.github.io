@@ -1,6 +1,7 @@
 import './nav.js'
 import { mountHands } from './hands.js'
 import { mountFigures, mountMark, mountArena } from './figures.js'
+import { mountAppMockup } from './app-mockup.js'
 
 const RAW = 'https://raw.githubusercontent.com/Yashi12121/YashiX/main'
 const RELEASES = 'https://api.github.com/repos/Yashi12121/YashiX/releases/latest'
@@ -116,6 +117,9 @@ async function loadAssets() {
   }
 }
 loadAssets()
+
+// Mount 3D App Simulator
+mountAppMockup(document.getElementById('appStage'))
 
 // Mount Figures and Benchmark Arena
 mountFigures({ reduced })
